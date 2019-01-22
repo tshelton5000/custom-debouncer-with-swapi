@@ -7,19 +7,25 @@ const App = () => {
 
   const handleChange = (event) => {
     setQuery(event.target.value);
+    console.log('new query being set');
   }
 
   useEffect(() => {
-    if (query !== ''){
+    if (query !== '' && !isNaN(query)){
+      console.log(Number(query))
       let timer = setTimeout(() => setCanFetch(true), 1500)
       return(
-        () => clearTimeout(timer)
+        () => {
+          console.log('timer being cleared');
+          clearTimeout(timer)
+        }
       )
     }
   }, [query])
 
   useEffect(() => {
     if (canFetch){
+      console.log('fetching results');
       fetch(`https://swapi.co/api/people/${query}/`)
         .then(res => res.json())
         .then(json => {
