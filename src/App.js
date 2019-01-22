@@ -33,7 +33,7 @@ const App = () => {
     <div>
       <h1>Search for a Star Wars Character Below!</h1>
       <input onChange={handleChange}/><br/>
-      {returnData}
+      {canFetch ? 'Loading...' : returnData}
     </div>
   )
 }
