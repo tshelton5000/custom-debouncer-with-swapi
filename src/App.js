@@ -1,28 +1,41 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect} from 'react';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+const App = () => {
+  const [query, setQuery] = useState('');
+  const [canFetch, setCanFetch] = useState(false);
+  const [returnData, setReturnData] = useState('Enter an integer')
+
+  const handleChange = (event) => {
+    setQuery(event.target.value);
   }
+
+  useEffect(() => {
+    if (query !== ''){
+      let timer = setTimeout(() => setCanFetch(true), 1500)
+      return(
+        () => clearTimeout(timer)
+      )
+    }
+  }, [query])
+
+  useEffect(() => {
+    if (canFetch){
+      fetch(`https://swapi.co/api/people/${query}/`)
+        .then(res => res.json())
+        .then(json => {
+          setReturnData(json.name)
+          setCanFetch(false)
+        })
+    }
+  })
+
+  return(
+    <div>
+      <h1>Search for a Star Wars Character Below!</h1>
+      <input onChange={handleChange}/><br/>
+      {returnData}
+    </div>
+  )
 }
 
 export default App;
